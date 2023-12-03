@@ -1,8 +1,8 @@
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define WRITTEN_IN_FULL_NUBERS 9
 
@@ -15,13 +15,13 @@ int main(int argc, char *argv[]) {
     char buffer[100];
 
     file_ptr = fopen(filename, "r");
-    if(file_ptr == NULL) {
+    if (file_ptr == NULL) {
         printf("Unable to open input file");
         return EXIT_FAILURE;
     }
 
     uint64_t sum = 0;
-    while (fgets(buffer, sizeof(buffer), file_ptr) != NULL)  {
+    while (fgets(buffer, sizeof(buffer), file_ptr) != NULL) {
         sum += get_calibration_values(buffer);
     }
 
@@ -35,11 +35,11 @@ int8_t get_calibration_values(const char *s) {
     int8_t first = -1, last = -1;
 
     while (*head != '\0') {
-        if(isdigit(*head)) {
+        if (isdigit(*head)) {
             if (first < 0) {
-                first = (int8_t) *head - '0';
+                first = (int8_t)*head - '0';
             } else {
-                last = (int8_t) *head - '0';
+                last = (int8_t)*head - '0';
             }
         } else {
 
@@ -51,19 +51,20 @@ int8_t get_calibration_values(const char *s) {
                     last = found_number;
                 }
             }
-
         }
         head += sizeof(char);
     }
 
-    if (last < 0) last = first;
+    if (last < 0)
+        last = first;
     return first * 10 + last;
 }
 
 uint8_t contains_number_spelled(const char *s) {
-    const char *spelled_numbers[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    const char *spelled_numbers[] = {"one", "two",   "three", "four", "five",
+                                     "six", "seven", "eight", "nine"};
     uint8_t offset = 0;
-    
+
     for (uint8_t i = 0; i < WRITTEN_IN_FULL_NUBERS; i++) {
         const char *written_number = spelled_numbers[i];
         const char *head = s;
@@ -77,10 +78,10 @@ uint8_t contains_number_spelled(const char *s) {
             head++;
         }
 
-        if(match == true){
-            printf("Found number %d in string %s", i+1, s);
+        if (match == true) {
+            printf("Found number %d in string %s", i + 1, s);
             return i + 1;
-        } 
+        }
     }
 
     return 0;
